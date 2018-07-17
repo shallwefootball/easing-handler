@@ -16,7 +16,8 @@ var x = d3.scaleLinear().range([0, WIDTH]);
 var y = d3.scaleLinear().range([HEIGHT, 0]);
 const lineRange = d3.range(0, 1, 0.002).concat(1);
 
-const Easing = ({ t, path, easing }) => {
+export const EasingSvg = ({ t, path, easing, strokeWidth = 1.4 }) => {
+  const onlyMenu = t === undefined;
   return (
     <svg
       width="100%"
@@ -24,8 +25,13 @@ const Easing = ({ t, path, easing }) => {
       viewBox={`0 0 ${GRAPH_WIDTH} ${GRAPH_HEIHGT}`}
     >
       <g transform="translate(4, 30)">
-        <path d={path(lineRange)} fill="none" stroke="#000" strokeWidth={1.4} />
-        <circle cx={x(t)} cy={y(easing(t))} r={2} />
+        <path
+          d={path(lineRange)}
+          fill="none"
+          stroke="#000"
+          strokeWidth={strokeWidth}
+        />
+        {!onlyMenu && <circle cx={x(t)} cy={y(easing(t))} r={2} />}
         <line
           x1="0"
           y1="0"
@@ -45,17 +51,18 @@ const Easing = ({ t, path, easing }) => {
           strokeWidth={1.2}
         />
       </g>
-      <Arrow x={WIDTH + 20} y={y(easing(t)) + 22} />
+      {!onlyMenu && <Arrow x={WIDTH + 20} y={y(easing(t)) + 22} />}
     </svg>
   );
 };
 
+export const path = easing =>
+  d3
+    .line()
+    .x(t => x(t))
+    .y(t => y(easing(t)));
+
 export default componentFromStream(props$ => {
-  const path = easing =>
-    d3
-      .line()
-      .x(t => x(t))
-      .y(t => y(easing(t)));
   const event$ = props$.switchMap(props => props.stream);
   const t$ = props$
     .take(1)
@@ -66,7 +73,7 @@ export default componentFromStream(props$ => {
   return Observable.combineLatest(props$, t$, (props, t) => {
     const _props = { ...props, t };
     return (
-      <Easing {..._props} path={path(props.easing)} easing={props.easing} />
+      <EasingSvg {..._props} path={path(props.easing)} easing={props.easing} />
     );
   });
 });
