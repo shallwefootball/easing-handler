@@ -65,7 +65,6 @@ export const path = easing =>
 export default componentFromStream(props$ => {
   const event$ = props$.switchMap(props => props.stream);
   const t$ = props$
-    .take(1)
     .combineLatest(event$, ({ ms }) => ms)
     .switchMap(ms => duration$(ms))
     .startWith(0);
