@@ -8,7 +8,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import eases from "eases";
 import {
@@ -20,6 +19,8 @@ import {
 } from "recompose";
 import Easing, { EasingSvg, path } from "./Easing";
 import { animation$ } from "./utils";
+
+console.log("eases", eases);
 
 const Handler = props => {
   const {
@@ -37,7 +38,7 @@ const Handler = props => {
     height,
     done
   } = props;
-
+  // console.log("easing", easing);
   return (
     <Paper
       style={{
@@ -77,13 +78,13 @@ const Handler = props => {
           onChange={e => select(e.target.value)}
           renderValue={str => str}
         >
-          {_.map(eases, f => {
+          {_.map(eases, (f, name) => {
             return (
-              <MenuItem value={f.name}>
+              <MenuItem value={name}>
                 <span style={{ width: 20, height: 20 }}>
                   <EasingSvg path={path(f)} easing={f} strokeWidth={5} />
                 </span>
-                <ListItemText>{f.name}</ListItemText>
+                <ListItemText>{name}</ListItemText>
               </MenuItem>
             );
           })}

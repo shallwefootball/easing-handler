@@ -28,11 +28,17 @@ export default (initProps, stream) => BaseComponent => {
                   slide={ms =>
                     this.setState({ [name]: { ...state[name], ms } })
                   }
-                  select={easingName =>
+                  select={easingName => {
+                    console.log(
+                      "eases[easingName]",
+                      eases[easingName],
+                      easingName,
+                      eases
+                    );
                     this.setState({
                       [name]: { ...state[name], easing: eases[easingName] }
-                    })
-                  }
+                    });
+                  }}
                   change={tv => this.setState({ tv })}
                 />
               );
