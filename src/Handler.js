@@ -20,8 +20,6 @@ import {
 import Easing, { EasingSvg, path } from "./Easing";
 import { animation$ } from "./utils";
 
-console.log("eases", eases);
-
 const Handler = props => {
   const {
     slide,
