@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { Observable } from "rxjs/Observable";
 import eases from "eases";
