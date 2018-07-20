@@ -36,7 +36,6 @@ const Handler = props => {
     height,
     done
   } = props;
-  // console.log("easing", easing);
   return (
     <Paper
       style={{
@@ -182,6 +181,17 @@ export default compose(
     );
   }),
   lifecycle({
+    shouldComponentUpdate(nextProps) {
+      const { ms, tv, easing, toggle, opacity, height } = this.props;
+      return (
+        ms !== nextProps.ms ||
+        tv !== nextProps.tv ||
+        easing !== nextProps.easing ||
+        toggle !== nextProps.toggle ||
+        opacity !== nextProps.opacity ||
+        height !== nextProps.height
+      );
+    },
     componentDidMount() {
       this.props.getRef();
     }

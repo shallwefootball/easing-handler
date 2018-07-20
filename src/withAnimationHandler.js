@@ -1,45 +1,53 @@
 import React, { Component, createElement } from "react";
-import { mapPropsStream } from "recompose";
 import _ from "lodash";
 import eases from "eases";
 import Handler from "./Handler";
 
-export default (initProps, stream) => BaseComponent => {
+const cloneState = (animations, name, value) => {
+  return {
+    animations: {
+      ...animations,
+      [name]: {
+        ...animations[name],
+        ...value
+      }
+    }
+  };
+};
+
+export default BaseComponent => {
   return class extends Component {
-    state = { ...initProps };
+    state = { animations: this.props.animations };
     render() {
-      const { props, state } = this;
+      const {
+        props,
+        state: { animations }
+      } = this;
       return (
         <div>
-          {createElement(mapPropsStream(stream)(BaseComponent), {
+          {createElement(BaseComponent, {
             ...props,
-            ...state
+            animations
           })}
           <div style={{ position: "fixed", bottom: 0, right: 0 }}>
-            {_.map(props, (animation, name) => {
+            {_.map(animations, (animation, name) => {
               return (
                 <Handler
-                  {...props[name]}
-                  {...state[name]}
+                  {...animation}
                   name={name}
-                  click={fire =>
-                    this.setState({ [name]: { ...state[name], fire } })
-                  }
                   slide={ms =>
-                    this.setState({ [name]: { ...state[name], ms } })
+                    this.setState(cloneState(animations, name, { ms }))
                   }
                   select={easingName => {
-                    console.log(
-                      "eases[easingName]",
-                      eases[easingName],
-                      easingName,
-                      eases
+                    this.setState(
+                      cloneState(animations, name, {
+                        easing: eases[easingName]
+                      })
                     );
-                    this.setState({
-                      [name]: { ...state[name], easing: eases[easingName] }
-                    });
                   }}
-                  change={tv => this.setState({ tv })}
+                  change={tv =>
+                    this.setState(cloneState(animations, name, { tv }))
+                  }
                 />
               );
             })}
