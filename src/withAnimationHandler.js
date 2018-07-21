@@ -33,6 +33,7 @@ export default BaseComponent => {
             {_.map(animations, (animation, name) => {
               return (
                 <Handler
+                  key={name}
                   {...animation}
                   name={name}
                   slide={ms =>

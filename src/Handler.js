@@ -77,7 +77,7 @@ const Handler = props => {
         >
           {_.map(eases, (f, name) => {
             return (
-              <MenuItem value={name}>
+              <MenuItem key={name} value={name}>
                 <span style={{ width: 20, height: 20 }}>
                   <EasingSvg path={path(f)} easing={f} strokeWidth={5} />
                 </span>
